@@ -19,11 +19,10 @@ un petit enregistreur d'écran pour Windows
 
 ### Captures d'écran
 
-![Capture 1](screenshots/1.png)
-![Capture 2](screenshots/2.png)
-![Capture 3](screenshots/3.png)
-![Capture 4](screenshots/4.png)
-![Capture 5](screenshots/5.png)
+| ![Capture 1](screenshots/1.png) | ![Capture 2](screenshots/2.png) |
+|-----------------------------------|-----------------------------------|
+| ![Capture 3](screenshots/3.png) | ![Capture 4](screenshots/4.png) |
+| ![Capture 5](screenshots/5.png) |
 
 ### Librairies utilisées
 
