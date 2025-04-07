@@ -28,7 +28,7 @@ un petit enregistreur d'écran pour Windows
 A la fin de l'enregistrement, la taille du fichier sera affichée.  
 Vous pourrez alors choisir de compresser la vidéo si ffmpeg est disponible dans votre environnement.  
 
-La détection sera automatique pour l'encodeur choisi (av1_nvenc, hevc_nvenc, h264_nvenc, libx265).  
+La détection et la sélection sera automatique pour l'encodeur en fonction de ce qui est disponible dans votre environnement (av1_nvenc, hevc_nvenc, h264_nvenc, libx265).  
 Vous pourrez choisir le taux de compression.  
 L'avancement de la compression est indiqué avec une jauge de progression.
 
