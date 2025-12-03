@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.IO;
 using ScreenRecorderLib;
@@ -26,5 +26,12 @@ namespace wrec.Models
         public int AudioBitrateKbps { get; set; } = 128;
         public int MicrophoneVolumePercent { get; set; } = 50;
         public int SystemVolumePercent { get; set; } = 50;
+
+        // Area selection settings
+        public bool UseAreaSelection { get; set; } = false;
+        public int AreaX { get; set; } = 0;
+        public int AreaY { get; set; } = 0;
+        public int AreaWidth { get; set; } = 800;
+        public int AreaHeight { get; set; } = 600;
     }
 }
