@@ -38,4 +38,4 @@ A la fin d'une compression, il est indiqué le gain obtenu sur le fichier origin
 
 Il s'agit de mon premier programme C# donc des bugs peuvent être présents.  
 Avant tout créé pour mon usage personnel, je souhaitais un programme simple permettant d'enregistrer mon écran entier avec audio système et micro.  
-Je remercie grandement la librairie ScreenRecorderLib sans quoi ce programme n'aurait pas vu le jour.
+Je remercie grandement la librairie [ScreenRecorderLib](https://github.com/sskodje/ScreenRecorderLib) sans quoi ce programme n'aurait pas vu le jour.
