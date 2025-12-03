@@ -1,4 +1,4 @@
-﻿using ScreenRecorderLib;
+using ScreenRecorderLib;
 using System.Drawing;
 
 namespace wrec.Models
@@ -10,6 +10,10 @@ namespace wrec.Models
         public AudioOptions AudioOptions { get; set; }
         public VideoEncoderOptions VideoEncoderOptions { get; set; }
         public MouseOptions MouseOptions { get; set; }
+
+        // Area selection properties
+        public bool UseAreaSelection { get; set; }
+        public Rectangle SelectedArea { get; set; }
 
         public ScreenRecorderLib.RecorderOptions ToScreenRecorderOptions()
         {
