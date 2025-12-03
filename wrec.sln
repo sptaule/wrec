@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35919.96
@@ -19,8 +19,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C21DDC9E-8D3D-4A80-80D7-742F7C2EC9A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C21DDC9E-8D3D-4A80-80D7-742F7C2EC9A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C21DDC9E-8D3D-4A80-80D7-742F7C2EC9A1}.Debug|ARM64.ActiveCfg = Debug|ARM64
 		{C21DDC9E-8D3D-4A80-80D7-742F7C2EC9A1}.Debug|ARM64.Build.0 = Debug|ARM64
 		{C21DDC9E-8D3D-4A80-80D7-742F7C2EC9A1}.Debug|x64.ActiveCfg = Debug|x64
@@ -35,15 +33,8 @@ Global
 		{C21DDC9E-8D3D-4A80-80D7-742F7C2EC9A1}.Release|x64.Build.0 = Release|x64
 		{C21DDC9E-8D3D-4A80-80D7-742F7C2EC9A1}.Release|x86.ActiveCfg = Release|x64
 		{C21DDC9E-8D3D-4A80-80D7-742F7C2EC9A1}.Release|x86.Build.0 = Release|x64
-		{7B075036-12B2-22C2-41C1-C4631ECE793F}.Debug|Any CPU.ActiveCfg = Debug
-		{7B075036-12B2-22C2-41C1-C4631ECE793F}.Debug|ARM64.ActiveCfg = Debug
-		{7B075036-12B2-22C2-41C1-C4631ECE793F}.Debug|x64.ActiveCfg = Debug
-		{7B075036-12B2-22C2-41C1-C4631ECE793F}.Debug|x86.ActiveCfg = Debug
-		{7B075036-12B2-22C2-41C1-C4631ECE793F}.Release|Any CPU.ActiveCfg = Release
-		{7B075036-12B2-22C2-41C1-C4631ECE793F}.Release|ARM64.ActiveCfg = Release
-		{7B075036-12B2-22C2-41C1-C4631ECE793F}.Release|x64.ActiveCfg = Release
-		{7B075036-12B2-22C2-41C1-C4631ECE793F}.Release|x64.Build.0 = Release
-		{7B075036-12B2-22C2-41C1-C4631ECE793F}.Release|x86.ActiveCfg = Release
+		{C21DDC9E-8D3D-4A80-80D7-742F7C2EC9A1}.Debug|Any CPU.ActiveCfg = Release|x64
+		{C21DDC9E-8D3D-4A80-80D7-742F7C2EC9A1}.Debug|Any CPU.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
