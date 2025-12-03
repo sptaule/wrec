@@ -1,4 +1,4 @@
-﻿using ScreenRecorderLib;
+using ScreenRecorderLib;
 using wrec.Models;
 using System;
 using System.IO;
@@ -29,7 +29,15 @@ namespace wref.Services
                 OutputOptions = new OutputOptions
                 {
                     RecorderMode = userOptions.OutputOptions.RecorderMode,
-                    OutputFrameSize = userOptions.OutputOptions.OutputFrameSize
+                    OutputFrameSize = userOptions.OutputOptions.OutputFrameSize,
+                    // Apply area selection if enabled
+                    SourceRect = userOptions.UseAreaSelection
+                        ? new ScreenRect(
+                            userOptions.SelectedArea.X,
+                            userOptions.SelectedArea.Y,
+                            userOptions.SelectedArea.Width,
+                            userOptions.SelectedArea.Height)
+                        : null
                 },
                 AudioOptions = userOptions.AudioOptions,
                 VideoEncoderOptions = userOptions.VideoEncoderOptions,
