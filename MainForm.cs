@@ -1,4 +1,4 @@
-﻿using MaterialSkin;
+using MaterialSkin;
 using MaterialSkin.Controls;
 using wrec.Models;
 using wrec.Services;
@@ -13,6 +13,7 @@ using wrec.UI.Controls;
 using System.Diagnostics;
 using wref.Services;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace wrec
 {
@@ -53,8 +54,10 @@ namespace wrec
             _recordingTimer = new System.Windows.Forms.Timer { Interval = 1000 };
             _recordingTimer.Tick += RecordingTimer_Tick;
 
-            _normalIcon = new Icon("app-icn.ico");
-            _recordingIcon = new Icon("app-icn-recording.ico");
+            // Load icons from embedded resources
+            var assembly = Assembly.GetExecutingAssembly();
+            _normalIcon = new Icon(assembly.GetManifestResourceStream("wrec.app-icn.ico"));
+            _recordingIcon = new Icon(assembly.GetManifestResourceStream("wrec.app-icn-recording.ico"));
             this.Icon = _normalIcon;
 
             InitializeMaterialSkin();
@@ -247,6 +250,13 @@ namespace wrec
             _generalTab.TxtOutputPath.Text = _config.OutputFolder;
             _generalTab.ChkEnableCountdown.Checked = _config.CountdownEnabled;
             _generalTab.TxtCountdownDelay.Text = _config.CountdownDelay.ToString();
+            _generalTab.ChkEnableAreaSelection.Checked = _config.UseAreaSelection;
+            if (_config.UseAreaSelection && _config.AreaWidth > 0 && _config.AreaHeight > 0)
+            {
+                _generalTab.SelectedArea = new Rectangle(_config.AreaX, _config.AreaY, _config.AreaWidth, _config.AreaHeight);
+                _generalTab.LblSelectedArea.Text = $"Zone: {_config.AreaX}, {_config.AreaY} - {_config.AreaWidth}x{_config.AreaHeight}";
+                _generalTab.LblSelectedArea.ForeColor = Color.Green;
+            }
             _videoTab.TxtVideoBitrate.Text = _config.VideoBitrate.ToString();
             _videoTab.TxtFramerate.Text = _config.FPS.ToString();
             _videoTab.ChkFixedFramerate.Checked = _config.FixedFramerate;
@@ -510,6 +520,11 @@ namespace wrec
             _config.RightClickColor = _mouseTab.RightClickColor;
             _config.CountdownEnabled = _generalTab.ChkEnableCountdown.Checked;
             _config.CountdownDelay = int.TryParse(_generalTab.TxtCountdownDelay.Text, out var delay) ? delay : 3;
+            _config.UseAreaSelection = _generalTab.ChkEnableAreaSelection.Checked;
+            _config.AreaX = _generalTab.SelectedArea.X;
+            _config.AreaY = _generalTab.SelectedArea.Y;
+            _config.AreaWidth = _generalTab.SelectedArea.Width;
+            _config.AreaHeight = _generalTab.SelectedArea.Height;
             _config.VideoBitrate = int.TryParse(_videoTab.TxtVideoBitrate.Text, out var videoBotrate) ? videoBotrate : 5000;
             _config.FPS = int.TryParse(_videoTab.TxtFramerate.Text, out var fps) ? fps : 60;
             _config.FixedFramerate = _videoTab.ChkFixedFramerate.Checked;
@@ -530,6 +545,11 @@ namespace wrec
                     _config.AudioBitrateKbps = 128;
                     break;
             }
+
+            _config.IsSystemAudioEnabled = _audioTab.ChkAudioEnabled.Checked;
+            _config.IsMicrophoneEnabled = _audioTab.ChkMicrophoneEnabled.Checked;
+            _config.MicrophoneVolumePercent = int.TryParse(_audioTab.TxtMicrophoneVolume.Text, out var micVol) ? micVol : 50;
+            _config.SystemVolumePercent = int.TryParse(_audioTab.TxtSystemVolume.Text, out var sysVol) ? sysVol : 50;
 
             _fileService.SaveConfig(_config);
 
@@ -678,6 +698,17 @@ namespace wrec
 
             try
             {
+                // Validate area selection if enabled
+                if (_generalTab.ChkEnableAreaSelection.Checked)
+                {
+                    if (_generalTab.SelectedArea.IsEmpty || _generalTab.SelectedArea.Width < 50 || _generalTab.SelectedArea.Height < 50)
+                    {
+                        MaterialMessageBox.Show("Veuillez sélectionner une zone valide pour l'enregistrement (minimum 50x50 pixels).",
+                            "Zone non sélectionnée", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return false;
+                    }
+                }
+
                 // Validate numeric fields
                 Validator.ValidateNumericField(_videoTab.TxtWidth.Text, 640, 7680, "Largeur", out int width);
                 Validator.ValidateNumericField(_videoTab.TxtHeight.Text, 480, 4320, "Hauteur", out int height);
@@ -748,6 +779,8 @@ namespace wrec
                 options = new Models.RecorderOptions
                 {
                     OutputPath = _generalTab.TxtOutputPath.Text,
+                    UseAreaSelection = _generalTab.ChkEnableAreaSelection.Checked,
+                    SelectedArea = _generalTab.SelectedArea,
                     OutputOptions = new OutputOptions
                     {
                         RecorderMode = RecorderMode.Video,
