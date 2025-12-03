@@ -1,28 +1,22 @@
 # wrec
-un petit enregistreur d'écran pour Windows
+
+Un enregistreur d'écran pour Windows.
 
 ### Fonctionnalités
 
-- [x] 💻 Enregistre l'écran entier
+- [x] Enregistre l'écran entier ou bien une zone définie
 - [x] Résolution paramétrable
 - [x] Encodeur paramétrable (framerate, profil, bitrate, qualité)
-- [x] 🎧 Enregistre l'audio système
-- [x] 🎤️ Enregistre l'audio microphone
-- [x] 🔊 Modification des volumes audio (système et micro)
-- [x] Capture le curseur et les clics de souris (optionnel)
+- [x] Peut enregistrer l'audio système
+- [x] Peut enregistrer l'audio microphone
+- [x] Modification des volumes audio (système et micro)
+- [x] Peut capturer le curseur et les clics de souris
 - [x] Paramétrage des clics de souris (couleurs, rayon, durée)
-- [x] ⌛ Timer avant l'enregistrement (optionnel)
-- [x] ⌨️ Raccourcis clavier pour démarrer/arrêter l'enregistrement (<kbd>Ctrl+F9</kbd> et <kbd>Ctrl+F10</kbd>)
-- [x] ℹ️ Icône SystemTray lors de l'enregistrement
+- [x] Peut ajouter un timer avant l'enregistrement
+- [x] Raccourcis clavier pour démarrer/arrêter l'enregistrement (<kbd>Ctrl+F9</kbd> et <kbd>Ctrl+F10</kbd>)
+- [x] Icône SystemTray lors de l'enregistrement
 - [x] Compression disponible à la fin de l'enregistrement (ffmpeg)
 - [x] Configuration sauvegardée à chaque changement
-
-### Captures d'écran
-
-| ![Capture 1](screenshots/1.png) | ![Capture 2](screenshots/2.png) |
-|-----------------------------------|-----------------------------------|
-| ![Capture 3](screenshots/3.png) | ![Capture 4](screenshots/4.png) |
-| ![Capture 5](screenshots/5.png) |
 
 ### Librairies utilisées
 
@@ -33,11 +27,12 @@ un petit enregistreur d'écran pour Windows
 ### Compression
 
 A la fin de l'enregistrement, la taille du fichier sera affichée.  
-Vous pourrez alors choisir de compresser la vidéo si ffmpeg est disponible dans votre environnement.  
+Vous pourrez alors choisir de compresser la vidéo si FFmpeg est disponible dans votre environnement.  
 
 La détection et la sélection sera automatique pour l'encodeur en fonction de ce qui est disponible dans votre environnement (av1_nvenc, hevc_nvenc, h264_nvenc, libx265).  
 Vous pourrez choisir le taux de compression.  
-L'avancement de la compression est indiqué avec une jauge de progression.
+L'avancement de la compression est indiqué avec une jauge de progression.  
+A la fin d'une compression, il est indiqué le gain obtenu sur le fichier original, et il est également possible de recommencer une compression en choisissant un autre preset.
 
 ### Conclusion
 
