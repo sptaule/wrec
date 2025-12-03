@@ -1,4 +1,4 @@
-﻿using MaterialSkin.Controls;
+using MaterialSkin.Controls;
 using ScreenRecorderLib;
 using System;
 using System.Drawing;
