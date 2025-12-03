@@ -1,4 +1,4 @@
-﻿using MaterialSkin;
+using MaterialSkin;
 using MaterialSkin.Controls;
 using System;
 using System.Drawing;
@@ -14,6 +14,12 @@ namespace wrec.UI.Tabs
         public MaterialButton BtnBrowseFolder { get; private set; }
         public MaterialTextBox TxtCountdownDelay { get; private set; }
         public MaterialCheckbox ChkEnableCountdown { get; private set; }
+
+        // Area selection controls
+        public MaterialCheckbox ChkEnableAreaSelection { get; private set; }
+        public MaterialButton BtnSelectArea { get; private set; }
+        public MaterialLabel LblSelectedArea { get; private set; }
+        public Rectangle SelectedArea { get; set; }
 
         // Chemin par défaut
         private readonly string _defaultOutputPath = Path.Combine(
@@ -109,6 +115,56 @@ namespace wrec.UI.Tabs
             // Ajouter un tooltip
             toolTip.SetToolTip(TxtCountdownDelay, "Nombre de secondes avant de démarrer l'enregistrement");
             toolTip.SetToolTip(ChkEnableCountdown, "Activer/désactiver le délai avant l'enregistrement");
+
+            yPos += 80;
+
+            // ===== AREA SELECTION SECTION =====
+            var lblAreaTitle = new MaterialLabel
+            {
+                Text = "Sélection de zone",
+                Location = new Point(margin, yPos),
+                Size = new Size(400, 30),
+                FontType = MaterialSkinManager.fontType.H6
+            };
+            this.Controls.Add(lblAreaTitle);
+            yPos += 40;
+
+            // Checkbox - Enable area selection
+            ChkEnableAreaSelection = new MaterialCheckbox
+            {
+                Text = "Enregistrer uniquement une zone spécifique",
+                Checked = false,
+                Location = new Point(margin, yPos),
+                Size = new Size(400, 30)
+            };
+            this.Controls.Add(ChkEnableAreaSelection);
+            yPos += 45;
+
+            // Button - Select area
+            BtnSelectArea = new MaterialButton
+            {
+                Text = "Sélectionner la zone",
+                Location = new Point(margin, yPos),
+                Size = new Size(200, 36),
+                Type = MaterialButton.MaterialButtonType.Contained,
+                Enabled = false
+            };
+            this.Controls.Add(BtnSelectArea);
+
+            // Label - Selected area info
+            LblSelectedArea = new MaterialLabel
+            {
+                Text = "Aucune zone sélectionnée",
+                Location = new Point(margin + 220, yPos + 8),
+                Size = new Size(400, 20),
+                FontType = MaterialSkinManager.fontType.Body2,
+                ForeColor = Color.Gray
+            };
+            this.Controls.Add(LblSelectedArea);
+
+            // Tooltips for area selection
+            toolTip.SetToolTip(ChkEnableAreaSelection, "Activer pour enregistrer seulement une partie de l'écran");
+            toolTip.SetToolTip(BtnSelectArea, "Cliquez pour sélectionner la zone à enregistrer");
         }
 
         private void SetupEventHandlers()
@@ -158,6 +214,31 @@ namespace wrec.UI.Tabs
                 if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
                 {
                     e.Handled = true;
+                }
+            };
+
+            // Area selection event handlers
+            ChkEnableAreaSelection.CheckedChanged += (sender, e) =>
+            {
+                BtnSelectArea.Enabled = ChkEnableAreaSelection.Checked;
+                if (!ChkEnableAreaSelection.Checked)
+                {
+                    SelectedArea = Rectangle.Empty;
+                    LblSelectedArea.Text = "Aucune zone sélectionnée";
+                    LblSelectedArea.ForeColor = Color.Gray;
+                }
+            };
+
+            BtnSelectArea.Click += (sender, e) =>
+            {
+                using (var areaSelectorForm = new wrec.UI.AreaSelectorForm())
+                {
+                    if (areaSelectorForm.ShowDialog() == DialogResult.OK)
+                    {
+                        SelectedArea = areaSelectorForm.SelectedArea;
+                        LblSelectedArea.Text = $"Zone: {SelectedArea.X}, {SelectedArea.Y} - {SelectedArea.Width}x{SelectedArea.Height}";
+                        LblSelectedArea.ForeColor = Color.Green;
+                    }
                 }
             };
         }
