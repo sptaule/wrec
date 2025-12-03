@@ -1,4 +1,4 @@
-﻿using MaterialSkin.Controls;
+using MaterialSkin.Controls;
 using wrec.Services;
 using System;
 using System.Diagnostics;
@@ -18,6 +18,8 @@ namespace wrec.UI.Controls
         private MaterialButton _btnCancel;
         private MaterialLabel _lblStatus;
         private MaterialButton _btnClose;
+        private MaterialButton _btnOpenFile;
+        private MaterialButton _btnOpenFolder;
 
         private readonly FFmpegService _ffmpegService;
         private string _currentVideoPath;
@@ -36,7 +38,7 @@ namespace wrec.UI.Controls
 
         private void InitializeUI()
         {
-            this.Size = new Size(830, 140);
+            this.Size = new Size(700, 130);
             this.BackColor = Color.White;
             this.Visible = false;
 
@@ -44,28 +46,61 @@ namespace wrec.UI.Controls
             _lblTitle = new MaterialLabel
             {
                 Text = "Compression vidéo",
-                Location = new Point(10, 10),
-                Size = new Size(300, 30),
+                Location = new Point(10, 8),
+                Size = new Size(180, 25),
                 FontType = MaterialSkin.MaterialSkinManager.fontType.H6
             };
             this.Controls.Add(_lblTitle);
 
+            // Status
+            _lblStatus = new MaterialLabel
+            {
+                Text = "Prêt à compresser",
+                Location = new Point(200, 10),
+                Size = new Size(490, 20),
+                TextAlign = ContentAlignment.MiddleRight,
+                FontType = MaterialSkin.MaterialSkinManager.fontType.Body2
+            };
+            this.Controls.Add(_lblStatus);
+
             // Qualité
             _cmbQuality = new MaterialComboBox
             {
-                Location = new Point(10, 45),
-                Size = new Size(300, 40),
+                Location = new Point(10, 40),
+                Size = new Size(200, 40),
                 Items = { "Qualité très basse", "Qualité basse", "Qualité moyenne", "Qualité haute" },
                 SelectedIndex = 1
             };
             this.Controls.Add(_cmbQuality);
 
+            // Bouton Ouvrir fichier (icône)
+            _btnOpenFile = new MaterialButton
+            {
+                Text = "📄",
+                Location = new Point(220, 45),
+                Size = new Size(32, 32),
+                Type = MaterialButton.MaterialButtonType.Outlined,
+                Font = new Font("Segoe UI Emoji", 12F)
+            };
+            this.Controls.Add(_btnOpenFile);
+
+            // Bouton Ouvrir dossier (icône)
+            _btnOpenFolder = new MaterialButton
+            {
+                Text = "📁",
+                Location = new Point(280, 45),
+                Size = new Size(32, 32),
+                Type = MaterialButton.MaterialButtonType.Outlined,
+                Font = new Font("Segoe UI Emoji", 12F)
+            };
+            this.Controls.Add(_btnOpenFolder);
+
             // Bouton Compresser
             _btnCompress = new MaterialButton
             {
                 Text = "COMPRESSER",
-                Location = new Point(320, 50),
-                Size = new Size(120, 36),
+                Location = new Point(350, 45),
+                Size = new Size(130, 32),
                 Type = MaterialButton.MaterialButtonType.Contained,
                 UseAccentColor = true
             };
@@ -75,43 +110,32 @@ namespace wrec.UI.Controls
             _btnCancel = new MaterialButton
             {
                 Text = "ANNULER",
-                Location = new Point(450, 50),
-                Size = new Size(120, 36),
+                Location = new Point(490, 45),
+                Size = new Size(110, 32),
                 Type = MaterialButton.MaterialButtonType.Outlined,
                 Visible = false
             };
             this.Controls.Add(_btnCancel);
 
+            // Bouton fermeture panel
+            _btnClose = new MaterialButton
+            {
+                Text = "FERMER",
+                Location = new Point(595, 45),
+                Size = new Size(120, 32),
+                Type = MaterialButton.MaterialButtonType.Outlined
+            };
+            this.Controls.Add(_btnClose);
+
             // Barre de progression
             _progressBar = new MaterialProgressBar
             {
-                Location = new Point(10, 100),
-                Size = new Size(810, 10),
+                Location = new Point(10, 95),
+                Size = new Size(680, 8),
                 Maximum = 100,
                 Value = 0
             };
             this.Controls.Add(_progressBar);
-
-            // Status
-            _lblStatus = new MaterialLabel
-            {
-                Text = "Prêt à compresser",
-                Location = new Point(150, 12),
-                Size = new Size(650, 20),
-                TextAlign = ContentAlignment.MiddleRight,
-                FontType = MaterialSkin.MaterialSkinManager.fontType.Body1
-            };
-            this.Controls.Add(_lblStatus);
-
-            // Bouton fermeture panel
-            _btnClose = new MaterialButton
-            {
-                Text = "FERMER SANS COMPRESSER",
-                Location = new Point(580, 50),
-                Size = new Size(220, 36),
-                Type = MaterialButton.MaterialButtonType.Outlined
-            };
-            this.Controls.Add(_btnClose);
         }
 
         private void RegisterEvents()
@@ -148,6 +172,46 @@ namespace wrec.UI.Controls
                 _lblStatus.Text = "Compression annulée";
                 _progressBar.Value = 0;
                 OnCompressCancel?.Invoke(this, EventArgs.Empty);
+            };
+
+            _btnOpenFile.Click += (sender, e) =>
+            {
+                if (string.IsNullOrEmpty(_currentVideoPath) || !File.Exists(_currentVideoPath))
+                {
+                    MaterialMessageBox.Show("Le fichier vidéo n'existe pas.",
+                        "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                try
+                {
+                    Process.Start(_currentVideoPath);
+                }
+                catch (Exception ex)
+                {
+                    MaterialMessageBox.Show($"Erreur lors de l'ouverture du fichier: {ex.Message}",
+                        "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
+
+            _btnOpenFolder.Click += (sender, e) =>
+            {
+                if (string.IsNullOrEmpty(_currentVideoPath) || !File.Exists(_currentVideoPath))
+                {
+                    MaterialMessageBox.Show("Le fichier vidéo n'existe pas.",
+                        "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                try
+                {
+                    Process.Start("explorer.exe", $"/select,\"{_currentVideoPath}\"");
+                }
+                catch (Exception ex)
+                {
+                    MaterialMessageBox.Show($"Erreur lors de l'ouverture du dossier: {ex.Message}",
+                        "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             };
 
             _btnClose.Click += (sender, e) =>
@@ -233,8 +297,29 @@ namespace wrec.UI.Controls
 
             this.Invoke((MethodInvoker)delegate
             {
+                // Calculate file sizes and percentage
+                long originalSize = new FileInfo(_currentVideoPath).Length;
+                long compressedSize = new FileInfo(outputPath).Length;
+                double originalSizeMB = originalSize / 1024.0 / 1024.0;
+                double compressedSizeMB = compressedSize / 1024.0 / 1024.0;
+                double percentageChange = ((double)(compressedSize - originalSize) / originalSize) * 100;
+                
+                string sizeComparison;
+                if (percentageChange < 0)
+                {
+                    sizeComparison = $"Taille originale: {originalSizeMB:F2} MB\n" +
+                                   $"Taille compressée: {compressedSizeMB:F2} MB\n" +
+                                   $"Gain: {Math.Abs(percentageChange):F1}% ({(originalSizeMB - compressedSizeMB):F2} MB économisés)";
+                }
+                else
+                {
+                    sizeComparison = $"Taille originale: {originalSizeMB:F2} MB\n" +
+                                   $"Taille compressée: {compressedSizeMB:F2} MB\n" +
+                                   $"Perte: +{percentageChange:F1}% ({(compressedSizeMB - originalSizeMB):F2} MB de plus)";
+                }
+
                 using (var dialog = new CustomDialog("Compression terminée",
-                       $"La vidéo compressée a été enregistrée sous:\n{Path.GetFileName(outputPath)}"))
+                       $"La vidéo compressée a été enregistrée sous:\n{Path.GetFileName(outputPath)}\n\n{sizeComparison}"))
                 {
                     dialog.AddButton("Ouvrir le fichier", () =>
                     {
@@ -268,9 +353,9 @@ namespace wrec.UI.Controls
                     dialog.ShowDialog(this.FindForm());
                 }
 
-                // Masquer le panel et réinitialiser après la compression
-                this.Hide();
-                ResetPanel();
+                // Don't hide the panel - allow user to compress again with different preset
+                // Panel will only close when user clicks "Fermer" button
+                _progressBar.Value = 0;
                 OnCompressComplete?.Invoke(this, EventArgs.Empty);
             });
         }
