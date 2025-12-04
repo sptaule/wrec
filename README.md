@@ -34,6 +34,13 @@ Vous pourrez choisir le taux de compression.
 L'avancement de la compression est indiqué avec une jauge de progression.  
 A la fin d'une compression, il est indiqué le gain obtenu sur le fichier original, et il est également possible de recommencer une compression en choisissant un autre preset.
 
+### Resources utilisées
+
+| Statut       | CPU            | RAM           |
+| :---:        |     :---:      |         :---: |
+| idle         | 0.1%           | ~17 MB        |
+| recording    | 1%             | ~100 MB       |
+
 ### Conclusion
 
 Il s'agit de mon premier programme C# donc des bugs peuvent être présents.  
